@@ -1,0 +1,25 @@
+{% extends "feed/layout.html" %} {% load static %}
+{% block cssfiles %} {% endblock cssfiles %} {% block content %}
+    <div class="container form-log">
+        <h1>Вход</h1>
+        <form method="post" class="all-group">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control text-placeholder" name="username" placeholder="Введите E-mail:"
+                       required maxlength="255">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control text-placeholder" name="password" placeholder="Введите пароль:"
+                       required maxlength="255">
+            </div>
+            <div class="reg-but">
+                <div>
+                    <button type="submit" class="reg-but-1 text-1">Войти</button>
+                </div>
+                <div style="padding-top: 15px;">
+                    <a href="{% url 'register' %}" class="reg-but-2 text-1">Зарегистрироваться</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

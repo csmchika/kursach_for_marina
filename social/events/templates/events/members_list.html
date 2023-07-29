@@ -1,0 +1,80 @@
+{% extends "feed/layout.html" %} {% load static %}
+{% block cssfiles %}
+    <link href="{% static 'users/profile.css' %}" rel="stylesheet">
+{% endblock cssfiles %}
+{% block searchform %}
+<form
+  class="search"
+  action="{% url 'search_users' %}"
+  method="get">
+  <div class="text-field-icon">
+      <input name="q" type="text" placeholder="Поиск пользователей" />
+  </div>
+        <button type="submit">
+        <img src="{% static 'users/search.svg' %}" alt="Поиск">
+      </button>
+</form>
+<nav class="nav">
+    <a href="{% url 'my_profile' %}">Моя страница</a>
+    <a href="{% url 'events' %}">Мероприятия</a>
+    <a href="{% url 'home' %}">Форум</a>
+</nav>
+{% endblock searchform %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      {% if members %}
+      <div class="card card-signin my-5">
+        <div class="card-body">
+          {% for member in members %}
+          <a href="{{ member.user.get_absolute_url }}"
+            ><img
+              src="{{ member.user.image.url }}"
+              class="rounded mr-2"
+              width="40"
+              height="40"
+              alt=""
+          /></a>
+          <a class="text-dark" href="{{ member.user.get_absolute_url }}"
+            ><b>{{ member.user }}</b></a
+          >
+          <small
+            ><a
+              class="btn btn-danger float-right"
+              href="{% url 'delete-members' member.user.id member.event.id %}"
+              >UnFriend</a
+            ></small
+          >
+          <br /><br />
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <h5>
+        <i
+          >Никто не записался на мероприятие(</i>
+      </h5>
+      {% endif %}
+    </div>
+    <div class="col-md-4">
+      <div class="card card-signin my-5">
+        <a href="{{ request.user.profile.get_absolute_url }}"
+          ><img
+            class="card-img-top"
+            src="{{ request.user.profile.image.url }}"
+            alt=""
+        /></a>
+        <div class="card-body">
+          <h5 class="card-title text-center">{{ request.user }}</h5>
+          <h6 class="text-center">
+            {{ request.user.profile.friends.count }}
+            <p class="text-muted">Friends</p>
+          </h6>
+          <p class="card-text text-center">{{ request.user.profile.bio }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock content %} {% block jsfiles %}{% endblock jsfiles %}
+</div>

@@ -1,0 +1,102 @@
+{% extends "feed/layout.html" %}
+{% load static %}
+{% block cssfiles %}
+    <link href="{% static 'users/profile.css' %}" rel="stylesheet">
+{% endblock cssfiles %}
+{% block searchform %}
+<form
+  class="search"
+  action="{% url 'search_posts' %}"
+  method="get">
+  <div class="text-field-icon">
+      <input name="p" type="text" placeholder="Поиск постов" />
+  </div>
+        <button type="submit">
+        <img src="{% static 'users/search.svg' %}" alt="Поиск">
+      </button>
+</form>
+<nav class="nav">
+    <a href="{% url 'my_profile' %}">Моя страница</a>
+    <a href="{% url 'events' %}">Мероприятия</a>
+    <a href="{% url 'home' %}">Форум</a>
+</nav>
+{% endblock searchform %}
+{% block content %}
+    <div class="container">
+        <h1 class="home-h1">Посты пользователя {{ username }}</h1>
+        <div class="post-flex">
+            <div class="posts">
+            {% for post in posts %}
+            <div class="post-card">
+                <a href="{% url 'post-detail' post.id %}" style="margin-right: 20px;"><img class="rounded-circle" width="40" height="40" src="{{ post.pic.url }}" alt=""></a>
+                <div class="post-info">
+                    <h4 class="post-card-title">{{ post.title }}</h4>
+                    <p class="post-card-desc">{{ post.description }}</p>
+                    <div class="post-info-user">
+                        <a href="{{ post.user_name.profile.get_absolute_url }}"><img src="{{ post.user_name.profile.image.url }}" class="rounded-circle" width="32" height="32" alt=""></a>
+                        <div class="post-info-user-more">
+                            <p class="post-info-username">{{ post.user_name }}</p>
+                            <p class="post-info-userspec">{{ post.user_name.profile.spec }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-details">
+                    <img src="{% static 'users/mes-blog.svg' %}" alt="Количество ответов">
+                    <p>{{ post.details.count }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+
+{% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %}
+
+
+{% endblock content %}
+{% block jsfiles %}
+<script>
+    $(".like").click(function (e) {
+    var id = this.id;
+    var href = $('.like').find('a').attr('href');
+    e.preventDefault();
+
+    $.ajax({
+        url: href,
+        data: {
+          'likeId': id
+        },
+        success: function(response){
+          if(response.liked){
+            $('#likebtn' + id).html("Unlike");
+            $('#likebtn' + id).css("color", "red")
+          }
+          else{
+            $('#likebtn' + id).html("Like");
+            $('#likebtn' + id).css("color", "green")
+          }
+        }
+      })
+});
+</script>
+{% endblock jsfiles %}

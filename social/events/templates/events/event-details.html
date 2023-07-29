@@ -1,0 +1,99 @@
+{% extends "feed/layout.html" %}
+{% load static %}
+{% block cssfiles %}
+    <link href="{% static 'users/profile.css' %}" rel="stylesheet">
+{% endblock cssfiles %}
+{% block searchform %}
+<form
+  class="search"
+  action="{% url 'search_users' %}"
+  method="get">
+  <div class="text-field-icon">
+      <input name="q" type="text" placeholder="Поиск пользователей" />
+  </div>
+        <button type="submit">
+        <img src="{% static 'users/search.svg' %}" alt="Поиск">
+      </button>
+</form>
+<nav class="nav">
+    <a href="{% url 'my_profile' %}">Моя страница</a>
+    <a href="{% url 'events' %}">Мероприятия</a>
+    <a href="{% url 'home' %}">Форум</a>
+</nav>
+{% endblock searchform %}
+{% block content %}
+    <div class="container page">
+        <div class="lk">
+            <img class="card-profile-image" src="{{ event.pic.url }}"/>
+            <h2>{{ event.title }}</h2>
+            <p class="page-date">{{ event.date|date:'Y-m-d' }}</p>
+            <p class="pg">{{ event.description }}</p>
+            <div class="buttons-lk">
+                <div class="main-buttons-lk">
+                    {% if exists %}
+                <button class="edit"><a href="{% url 'delete-members' request.user.id event.id %}">Не пойду :(</a></button>
+              {% else %}
+                <button class="edit"><a href="{% url 'add-members' request.user.id event.id %}">Я пойду!</a></button>
+              {% endif %}
+                    <a href="{% url 'profile_view' event.user %}" class="create-event">Зайти к организатору</a>
+                </div>
+                <div class="lk-logout">
+                    <a class="logout" href="{% url 'events' %}"><img src="{% static 'users/logout.svg' %}" alt="Выйти"></a>
+                </div>
+            </div>
+        </div>
+        <div class="wall-flex">
+            <div class="wall-1">
+            <ul class="page-list">
+                <li>
+                    <div class="page-list-item">
+                        <img src="{% static 'users/my_friends.svg' %}" alt="Участники">
+                        <div class="page-list-text">
+                            <a href="{% url 'event-members' event.id %}" class="text-1">Участники</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="page-list-item">
+                        <img src="{% static 'users/my_project.svg' %}" alt="">
+                        <div class="page-list-text">
+                            <a href="{% url 'home' %}" class="text-1">Форум</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="page-list-item">
+                        <img src="{% static 'users/org.svg' %}" alt="Организатор">
+                        <div class="page-list-text">
+                            <a href="{% url 'profile_view' event.user %}" class="text-1">{{ event.user }}</a>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+        <div class="requests">
+            <div class="card-event-req">
+                <div class="card-event-req-top">
+                    <img class="card-event-user-image" src="{{ event.user.profile.image.url }}"/>
+                    <p>{{ event.user }} приглашает тебя посетить мероприятие "{{ event.title }}"!</p>
+                    <p>{{ event.date_posted|date:'Y-m-d'}}</p>
+                </div>
+
+            </div>
+            <div class="card-event-req">
+                <div class="card-event-req-top">
+                    <img class="card-event-user-image" src="{{ event.user.profile.image.url }}"/>
+                    <p>{{ event.user }} создал мероприятие "{{ event.title }}"</p>
+                    <p>{{ event.date_posted|date:'Y-m-d'}}</p>
+                </div>
+                <img class="card-event-image" src="{{ event.pic.url }}"/>
+
+            </div>
+        </div>
+        </div>
+
+    </div>
+{% endblock content %}
+{% block jsfiles %}
+{% endblock jsfiles %}

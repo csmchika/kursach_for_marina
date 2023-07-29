@@ -1,0 +1,31 @@
+{% extends "feed/layout.html" %} {% load static %}
+{% block cssfiles %}
+<link href="{% static 'users/auth.css' %}" rel="stylesheet">
+{% endblock cssfiles %}
+{% block content %}
+<div class="container reg">
+        <div class="reg-img">
+            <img src="{% static 'users/auth-image.jpg' %}" alt="Фото для регистрации">
+        </div>
+        <div class="form-reg">
+            <h1>Регистрация</h1>
+            <form method="POST" class="all-group">
+            {% csrf_token %}
+              {% for field in form %}
+              <div class="form-group">
+                    {{field}}
+              </div>
+              {% endfor %}
+                <div class="reg-but">
+                    <div>
+                        <button type="submit" class="reg-but-1 text-1">Зарегистрироваться</button>
+                    </div>
+                    <div style="padding-top: 15px;">
+                        <a href="{% url 'login' %}" class="reg-but-2 text-1">Войти</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock content %}

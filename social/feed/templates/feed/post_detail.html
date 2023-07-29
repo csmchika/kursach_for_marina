@@ -1,0 +1,127 @@
+{% extends "feed/layout.html" %}
+{% load static %}
+{% block cssfiles %}
+    <link href="{% static 'users/profile.css' %}" rel="stylesheet">
+{% endblock cssfiles %}
+{% block searchform %}
+<form
+  class="search"
+  action="{% url 'search_posts' %}"
+  method="get">
+  <div class="text-field-icon">
+      <input name="p" type="text" placeholder="Поиск постов" />
+  </div>
+        <button type="submit">
+        <img src="{% static 'users/search.svg' %}" alt="Поиск">
+      </button>
+</form>
+<nav class="nav">
+    <a href="{% url 'my_profile' %}">Моя страница</a>
+    <a href="{% url 'events' %}">Мероприятия</a>
+    <a href="{% url 'home' %}">Форум</a>
+</nav>
+{% endblock searchform %}
+{% block content %}
+    <div class="container">
+        <div class="post-theme">
+            <div class="post-theme-top">
+                <h2>{{ post.title }}</h2>
+                <div class="post-details">
+                    <img src="{% static 'users/mes-blog.svg' %}" alt="Количество ответов">
+                    <p>{{ post.details.count }}</p>
+                </div>
+            </div>
+            <div class="post-theme-bot">
+                <div class="post-theme-info-author">
+                    <img src="{{ post.pic.url }}" alt="" class="rounded-circle">
+                    <div class="post-theme-author">
+                        <h4 class="post-theme-author-title">{{post.title}}</h4>
+                        <p class="post-theme-author-spec">{{ post.user_name.profile.spec}}</p>
+                        <p class="post-theme-author-date">{{ post.date_posted|date:'Y-m-d'}}</p>
+                    </div>
+                </div>
+                <div class="post-theme-chat">
+                    <div class="post-theme-card">
+                        <div class="post-theme-card-info-author">
+                            <img src="{{ post.user_name.profile.image.url }}" alt="" class="rounded-circle">
+                            <div class="post-theme-card-author">
+                                <h4 class="post-theme-card-author-title">{{post.user_name}}</h4>
+                                <p class="post-theme-card-author-spec">{{ post.user_name.profile.spec}}</p>
+                                <p class="post-theme-card-author-message">{{ post.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% for detail in post.details.all %}
+                        {% if detail.username == user %}
+                        <div class="post-theme-card">
+                            <div class="post-theme-card-info-author">
+                                <img src="{{ detail.username.profile.image.url }}" alt="" class="rounded-circle">
+                                <div class="post-theme-card-author">
+                                    <h4 class="info-user-card-title" style="margin-bottom: 2px;">{{detail.username}}</h4>
+                                    <p class="info-user-card-spec" style="margin-bottom: 10px;">{{ detail.username.profile.spec}}</p>
+                                    <p class="info-user-card-message">{{ detail.comment}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="post-theme-card">
+                            <div class="post-theme-card-info-author">
+                                <img src="{{ detail.username.profile.image.url }}" alt="" class="rounded-circle">
+                                <div class="post-theme-card-author">
+                                    <h4 class="post-theme-card-author-title">{{detail.username}}</h4>
+                                    <p class="post-theme-card-author-spec">{{ detail.username.profile.spec}}</p>
+                                    <p class="post-theme-card-author-message">{{ detail.comment}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="form-comment-div">
+                        <form class="form-comment" method = "POST">
+                            {% csrf_token %}
+                            <textarea class="text-placeholder" id="id_comment" name="comment" placeholder="Введите текст..."></textarea>
+
+                            <div class="comment-button-div">
+                                <button class="comment-button" type="submit">Отправить</button>
+                                <div class="comment-info-user">
+                                    <img src="{{ user.profile.image.url }}" alt="" class="rounded-circle">
+                                    <div class="info-user-card">
+                                        <h4 class="info-user-card-title">{{user}}</h4>
+                                        <p class="info-user-card-spec">{{ user.profile.spec}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+{% endblock content %}
+{% block jsfiles %}
+<script>
+    $(".like").click(function (e) {
+    var id = this.id;
+    var href = $('.like').find('a').attr('href');
+    e.preventDefault();
+
+    $.ajax({
+        url: href,
+        data: {
+          'likeId': id
+        },
+        success: function(response){
+          if(response.liked){
+            $('#likebtn' + id).html("Unlike | {{post.likes.count}}");
+            $('#likebtn' + id).css("color", "red")
+          }
+          else{
+            $('#likebtn' + id).html("Like | {{post.likes.count}}");
+            $('#likebtn' + id).css("color", "green")
+          }
+        }
+      })
+});
+</script>
+{% endblock jsfiles %}

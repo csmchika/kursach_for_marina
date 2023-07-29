@@ -1,0 +1,110 @@
+{% extends "feed/layout.html" %}
+{% load static %}
+{% block cssfiles %}
+    <link href="{% static 'users/profile.css' %}" rel="stylesheet">
+{% endblock cssfiles %}
+{% block searchform %}
+<form
+  class="search"
+  action="{% url 'search_events' %}"
+  method="get">
+  <div class="text-field-icon">
+      <input name="q" type="text" placeholder="Поиск мероприятий" />
+  </div>
+        <button type="submit">
+        <img src="{% static 'users/search.svg' %}" alt="Поиск">
+      </button>
+</form>
+<nav class="nav">
+    <a href="{% url 'my_profile' %}">Моя страница</a>
+    <a href="{% url 'events' %}">Мероприятия</a>
+    <a href="{% url 'home' %}">Форум</a>
+</nav>
+{% endblock searchform %}
+{% block content %}
+    <div class="container">
+        <h1 class="events-h1">Мероприятия</h1>
+        <div class="hashtags">
+            <div class="tags-1">
+                <a href="search_events/?q=Offline"><p class="hashtag">Offline</p></a>
+                <a href="search_events/?q=On-line"><p class="hashtag">On-line</p></a>
+                <a href="search_events/?q=Backend"><p class="hashtag">Backend</p></a>
+                <a href="search_events/?q=Yandex"><p class="hashtag">Yandex</p></a>
+            </div>
+            <div class="tags-2">
+                <a href="search_events/?q=Мониторинг"><p class="hashtag">Мониторинг</p></a>
+                <a href="search_events/?q=Как любить Леш"><p class="hashtag">Как любить Леш</p></a>
+                <a href="search_events/?q=Котенки"><p class="hashtag">Котенки</p></a>
+                <a href="search_events/?q=Антоны"><p class="hashtag">Антоны</p></a>
+                <a href="search_events/?q=Нейросети"><p class="hashtag">Нейросети</p></a>
+            </div>
+        </div>
+        <div class="events">
+            {% for event in events %}
+            <div class="event-card">
+                <div class="event-card-top">
+                    <img class="event-card-user-image" src="{{ event.user.profile.image.url }}"/>
+                    <div class="event-card-top-text">
+                        <div class="top-text-left">
+                            <h5 class="event-card-title">{{ event.title }}</h5>
+                            <p class="event-card-des">{{ event.description}}</p>
+                        </div>
+                        <div class="top-text-right">
+                            <p class="event-card-user">{{ event.user }}</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="event-date">{{ event.date|date:'Y-m-d'}}</p>
+                <a href="{% url 'event-detail' event.id %}"><img class="event-card-img" src="{{ event.pic.url }}" alt=""></a>
+            </div>
+            {% endfor %}
+        </div>
+<!--        <div class="row">-->
+
+<!--          <div class="col-md-8">-->
+<!--            {% for event in events %}-->
+<!--            <div class="card card-signin my-5">-->
+<!--              <div class="card-body">-->
+<!--                <a href="{{ event.user.profile.get_absolute_url }}"></a>-->
+<!--                <a class="text-dark" href="{{ event.user.profile.get_absolute_url }}"><b>{{ event.user }}</b></a>-->
+<!--                <br><small class="text-muted">Posted on {{ event.date_posted }}</small>-->
+<!--                <br><small class="text-muted">Date on {{ event.date }}</small>-->
+<!--                <br><br>-->
+<!--                <p class="card-text text-dark">{{ event.description }}</p>-->
+<!--              </div>-->
+<!--              <a href="{% url 'event-detail' event.id %}"><img class="card-img-top" src="{{ event.pic.url }}" alt=""></a>-->
+<!--              {% if event.tags %}-->
+<!--              <br>-->
+<!--              <p class="text-danger ml-3"><b>Tags: <i>{{ event.tags }}</i></b></p>-->
+<!--              {% endif %}-->
+<!--            </div>-->
+<!--            {% endfor %}-->
+<!--           </div>-->
+<!--        </div>-->
+    </div>
+
+{% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %}
+
+{% endblock content %}
+{% block jsfiles %}
+{% endblock jsfiles %}

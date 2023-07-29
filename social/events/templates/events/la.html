@@ -1,0 +1,59 @@
+        <div class="wall-flex">
+            <div class="wall-1">
+            <ul class="page-list">
+                <li>
+                    <div class="page-list-item">
+                        <img src="{% static 'users/my_friends.svg' %}" alt="Мои друзья">
+                        <div class="page-list-text">
+                            <a href="{% url 'friend_list' %}" class="text-1">Мои друзья</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="page-list-item">
+                        <img src="{% static 'users/my_project.svg' %}" alt="">
+                        <div class="page-list-text">
+                            <a href="{% url 'user-posts' u.username %}" class="text-1">Мои обсуждения</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="page-list-item">
+                        <img src="{% static 'users/my_mero.svg' %}" alt="">
+                        <div class="page-list-text">
+                            <a href="{% url 'events' %}" class="text-1">Мероприятия</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="page-list-item">
+                        <img src="{% static 'users/messages.svg' %}" alt="">
+                        <div class="page-list-text">
+                            <a href="{% url 'home' %}" class="text-1">Форум</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="page-list-item">
+                        <img src="{% statidc 'users/forum.svg' %}" alt="">
+                        <div class="page-list-text">
+                            <a href="{% url 'post-create' %}" class="text-1">Создать обращение</a>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+        <div class="requests">
+            {% for event in events_req %}
+            <div class="card-event-req">
+                <div class="card-event-req-top">
+                    <img class="card-event-user-image" src="{{ event.from_user.profile.image.url }}"/>
+                    <p>{{ event.from_user.username }} пригласил вас на мероприятие "{{ event.event_id.title }}"</p>
+                </div>
+                <img class="card-event-image" src="{{ event.event_id.pic.url }}"/>
+
+            </div>
+            {% endfor %}
+        </div>
+        </div>

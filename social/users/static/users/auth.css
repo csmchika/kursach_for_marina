@@ -1,0 +1,127 @@
+@font-face {
+    font-family: Inter;
+    src: url(fonts/Inter-v.ttf);
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: #ededed;
+}
+a,
+button,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-family: Inter, sans-serif;
+    margin-bottom: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 58px;
+}
+.all-group {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+.all-group .form-control {
+    width: 377px;
+    height: 50px;
+    text-decoration: underline;
+    padding-left: 19px;
+    background: #fff;
+    box-shadow: 0 0 19px -3px rgba(0, 0, 0, 0.25);
+    border-radius: 7px;
+}
+.all-group .reg-but {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 35px;
+}
+.all-group .reg-but .reg-but-1 {
+    color: #fff;
+    padding: 13px 15px 13px 18px;
+    background: #463bc1;
+    border-radius: 7px;
+}
+.all-group .reg-but .reg-but-1:hover {
+    cursor: pointer;
+}
+.all-group .reg-but .reg-but-2 {
+    color: #000;
+    padding: 13px 20px;
+    background: #bcbcbc;
+    border-radius: 7px;
+}
+.all-group .reg-but .reg-but-2:hover {
+    cursor: pointer;
+}
+header {
+    background: #463bc1;
+    padding: 46px 380px;
+}
+header .name {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 58px;
+    color: #fff;
+    margin: 0 auto;
+}
+.container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0;
+}
+.text-1 {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+.text-placeholder {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+}
+.reg {
+    padding-top: 50px;
+    display: flex;
+    gap: 97px;
+}
+.reg .reg-img img {
+    width: 600px;
+    height: 600px;
+}
+.reg .form-reg {
+    display: flex;
+    flex-direction: column;
+    gap: 58px;
+}
+.form-log {
+    margin-top: 100px;
+    width: 385px;
+}
+.form-log h1 {
+    margin-bottom: 40px;
+}
+.form-log h4 {
+    margin-bottom: 10px;
+}
+.form-group {
+    margin:0;
+    padding:0;
+}
+

@@ -1,0 +1,49 @@
+{% extends "feed/layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block cssfiles %}
+    <link href="{% static 'users/profile.css' %}" rel="stylesheet">
+{% endblock cssfiles %}
+{% block searchform %}
+<form
+  class="search"
+  action="{% url 'search_posts' %}"
+  method="get">
+  <div class="text-field-icon">
+      <input name="p" type="text" placeholder="Поиск постов" />
+  </div>
+        <button type="submit">
+        <img src="{% static 'users/search.svg' %}" alt="Поиск">
+      </button>
+</form>
+<nav class="nav">
+    <a href="{% url 'my_profile' %}">Моя страница</a>
+    <a href="{% url 'events' %}">Мероприятия</a>
+    <a href="{% url 'home' %}">Форум</a>
+</nav>
+{% endblock searchform %}
+{% block content %}
+<br><br>
+<div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center"><b>Post</b></h5>
+            <form class="form-signin" method = "POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group"><br>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Post</button><br>
+            </div>
+        </form>
+    </div>
+    </div>
+    </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block jsfiles %}{% endblock jsfiles %}
